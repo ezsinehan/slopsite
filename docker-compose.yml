@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  backend:
+    build: ./slopsitebackend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/resume
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  frontend:
+    build: ./slopsitefrontend
+    ports:
+      - "4200:80"
+  # for HTTP traffic inside a container 80 is the default port
+  # first is host machine:second is docker container port
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: resume
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
