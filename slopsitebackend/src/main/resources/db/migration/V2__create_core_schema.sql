@@ -43,3 +43,7 @@ CREATE TABLE enrollments (
     CONSTRAINT unique_enrollment UNIQUE (student_id,course_id)
 );
 
+-- Create indexes on foreign keys for better performance
+CREATE INDEX idx_courses_teacher_id ON courses(teacher_id);
+CREATE INDEX idx_enrollments_student_id ON enrollments(student_id);
+CREATE INDEX idx_enrollments_course_id ON enrollments(course_id);
