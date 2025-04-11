@@ -23,7 +23,7 @@ CREATE TABLE courses (
     time VARCHAR(100) NOT NULL,
     current_capacity INTEGER NOT NULL,
     total_capacity INTEGER NOT NULL,
-    teacher_id INTEGER NOT NULL,
+    teacher_id INTEGER,
     CONSTRAINT fk_teacher FOREIGN KEY (teacher_id)
       REFERENCES teachers(id)
       ON DELETE SET NULL
@@ -36,9 +36,10 @@ CREATE TABLE enrollments (
     course_id INTEGER NOT NULL,
     CONSTRAINT fk_student FOREIGN KEY (student_id)
         REFERENCES students(id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
     CONSTRAINT fk_course FOREIGN KEY (course_id)
         REFERENCES courses(id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
     CONSTRAINT unique_enrollment UNIQUE (student_id,course_id)
 );
+
