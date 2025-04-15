@@ -1,8 +1,8 @@
-package com.slopsite.slopsitebackend.repository;
+package com.fb2devs.slopsitebackend.repository;
 
-import com.slopsite.slopsitebackend.model.Course;
-import com.slopsite.slopsitebackend.model.Enrollment;
-import com.slopsite.slopsitebackend.model.Student;
+import com.fb2devs.slopsitebackend.model.Course;
+import com.fb2devs.slopsitebackend.model.Enrollment;
+import com.fb2devs.slopsitebackend.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

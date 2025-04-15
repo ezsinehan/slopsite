@@ -1,12 +1,12 @@
-package com.slopsite.slopsitebackend.model;
+package com.fb2devs.slopsitebackend.model;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "teachers")
-public class Teacher {
+@Table(name = "students")
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,11 +20,11 @@ public class Teacher {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    private Set<Course> courses = new HashSet<>();
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Enrollment> enrollments = new HashSet<>();
 
     // No-argument constructor required by JPA
-    public Teacher() {
+    public Student() {
     }
 
     // Getters and Setters
@@ -60,22 +60,22 @@ public class Teacher {
         this.name = name;
     }
 
-    public Set<Course> getCourses() {
-        return courses;
+    public Set<Enrollment> getEnrollments() {
+        return enrollments;
     }
 
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
+    public void setEnrollments(Set<Enrollment> enrollments) {
+        this.enrollments = enrollments;
     }
 
     // Helper methods for managing relationships
-    public void addCourse(Course course) {
-        courses.add(course);
-        course.setTeacher(this);
+    public void addEnrollment(Enrollment enrollment) {
+        enrollments.add(enrollment);
+        enrollment.setStudent(this);
     }
 
-    public void removeCourse(Course course) {
-        courses.remove(course);
-        course.setTeacher(null);
+    public void removeEnrollment(Enrollment enrollment) {
+        enrollments.remove(enrollment);
+        enrollment.setStudent(null);
     }
 }

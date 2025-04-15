@@ -1,4 +1,4 @@
-package com.slopsite.slopsitebackend.model;
+package com.fb2devs.slopsitebackend.model;
 
 import jakarta.persistence.*;
 
