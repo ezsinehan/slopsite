@@ -19,6 +19,9 @@ public class Enrollment {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+    @Column
+    private String grade;
+
     // No-argument constructor required by JPA
     public Enrollment() {
     }
@@ -46,5 +49,13 @@ public class Enrollment {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }

@@ -35,4 +35,12 @@ public class EnrollmentService {
     public boolean isStudentEnrolledInCourse(Student student, Course course) {
         return enrollmentRepository.existsByStudentAndCourse(student, course);
     }
+
+    public Enrollment updateGrade(Long enrollmentId, String grade) {
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+            .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+        enrollment.setGrade(grade);
+        return enrollmentRepository.save(enrollment);
+    }
+    
 }

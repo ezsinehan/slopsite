@@ -53,4 +53,9 @@ public class EnrollmentController {
         Course course = courseService.findById(courseId);
         return enrollmentService.isStudentEnrolledInCourse(student, course);
     }
+
+    @PatchMapping("/{enrollmentId}/grade")
+public Enrollment updateGrade(@PathVariable Long enrollmentId, @RequestBody String grade) {
+    return enrollmentService.updateGrade(enrollmentId, grade);
+}
 }
