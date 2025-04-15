@@ -30,4 +30,10 @@ public class CourseService {
     public List<Course> searchCourses(String name) {
         return courseRepository.findByNameContainingIgnoreCase(name);
     }
+
+    // Add this method to CourseService
+    public Course findById(Long id) {
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + id));
+    }
 }

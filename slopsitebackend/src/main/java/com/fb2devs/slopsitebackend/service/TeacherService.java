@@ -25,4 +25,10 @@ public class TeacherService {
     public Teacher findByUsername(String username) {
         return teacherRepository.findByUsername(username);
     }
+
+    // Add this method to TeacherService
+    public Teacher findById(Long id) {
+        return teacherRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id));
+    }
 }

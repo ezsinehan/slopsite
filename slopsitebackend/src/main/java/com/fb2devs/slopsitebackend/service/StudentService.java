@@ -25,4 +25,10 @@ public class StudentService {
     public Student getByUsername(String username) {
         return studentRepo.findByUsername(username);
     }
+
+    // Add this method to StudentService
+    public Student findById(Long id) {
+        return studentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
+    }
 }
