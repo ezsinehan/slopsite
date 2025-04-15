@@ -18,7 +18,7 @@ services:
   # for HTTP traffic inside a container 80 is the default port
   # first is host machine:second is docker container port
   db:
-    image: postgres:16
+    image: postgres:15.2
     restart: always
     environment:
       POSTGRES_DB: resume
