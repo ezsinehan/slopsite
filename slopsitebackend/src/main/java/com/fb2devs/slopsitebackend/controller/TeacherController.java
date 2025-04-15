@@ -29,4 +29,11 @@ public class TeacherController {
     public Teacher getTeacherById(@PathVariable Long id) {
         return teacherService.findById(id);
     }
+
+    @PostMapping("/login")
+    public Teacher login(@RequestBody Teacher loginRequest) {
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+        return teacherService.authenticate(username, password);
+    }
 }

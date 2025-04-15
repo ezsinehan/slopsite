@@ -31,4 +31,9 @@ public class TeacherService {
         return teacherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id));
     }
+
+    public Teacher authenticate(String username, String password) {
+        return teacherRepository.findByUsernameAndPassword(username, password)
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+    }
 }
