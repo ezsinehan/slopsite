@@ -32,5 +32,12 @@ public class StudentController {
     public Student getStudentById(@PathVariable Long id) {
         return studentService.findById(id);
     }
+
+    @PostMapping("/login")
+    public Student login(@RequestBody Student loginRequest) {
+    String username = loginRequest.getUsername();
+    String password = loginRequest.getPassword();
+    return studentService.authenticate(username, password);
+}
 }
 

@@ -31,4 +31,10 @@ public class StudentService {
         return studentRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
     }
+
+    public Student authenticate(String username, String password) {
+        return studentRepo.findByUsernameAndPassword(username, password)
+            .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+    }
+    
 }
