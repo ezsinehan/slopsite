@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+// import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "students")
 public class Student {
@@ -21,6 +24,7 @@ public class Student {
     private String name;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Enrollment> enrollments = new HashSet<>();
 
     // No-argument constructor required by JPA

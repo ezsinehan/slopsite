@@ -90,15 +90,15 @@ public class DataInitializer {
             enrollment3.setCourse(course2);
             enrollmentService.saveEnrollment(enrollment3);
             
-            // Update course capacities
-            course1.setCurrentCapacity(1);
-            courseService.saveCourse(course1);
+            // // Update course capacities
+            // course1.setCurrentCapacity(1);
+            // courseService.saveCourse(course1);
             
-            course2.setCurrentCapacity(1);
-            courseService.saveCourse(course2);
+            // course2.setCurrentCapacity(1);
+            // courseService.saveCourse(course2);
             
-            course3.setCurrentCapacity(1);
-            courseService.saveCourse(course3);
+            // course3.setCurrentCapacity(1);
+            // courseService.saveCourse(course3);
             
             System.out.println("Sample data initialized successfully!");
         };

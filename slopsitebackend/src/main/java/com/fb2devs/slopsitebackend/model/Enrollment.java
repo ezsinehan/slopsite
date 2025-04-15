@@ -1,6 +1,12 @@
 package com.fb2devs.slopsitebackend.model;
 
 import jakarta.persistence.*;
+// import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+// import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+// import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+// import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "enrollments", uniqueConstraints = {
@@ -13,10 +19,13 @@ public class Enrollment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
+    @JsonBackReference
     private Student student;
 
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
+    @JsonBackReference
     private Course course;
 
     @Column

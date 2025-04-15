@@ -4,6 +4,14 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+// import com.fasterxml.jackson.annotation.JsonManagedReference;
+// import com.fasterxml.jackson.annotation.JsonBackReference;
+// import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+// import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+// import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "teachers")
 public class Teacher {
@@ -21,6 +29,7 @@ public class Teacher {
     private String name;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Course> courses = new HashSet<>();
 
     // No-argument constructor required by JPA
