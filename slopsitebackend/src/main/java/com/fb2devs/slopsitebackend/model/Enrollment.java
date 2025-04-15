@@ -1,6 +1,13 @@
 package com.fb2devs.slopsitebackend.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 @Table(
@@ -31,5 +38,23 @@ public class Enrollment {
     this.course = course;
   }
 
-  // Getters/setters next (or use Lombok later)
+  public Long getId() {
+    return id;
+  }
+
+  public Student getStudent() {
+    return student;
+  }
+
+  public void setStudent(Student student) {
+    this.student = student;
+  }
+
+  public Course getCourse() {
+    return course;
+  }
+
+  public void setCourse(Course course) {
+    this.course = course;
+  }
 }

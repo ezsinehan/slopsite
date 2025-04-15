@@ -1,6 +1,16 @@
 package com.fb2devs.slopsitebackend.model; 
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 
 @Entity //this marks our class as a JPA (our ORM) entity
 @Table(name="students")
@@ -18,6 +28,10 @@ public class Student {
   @Column(nullable = false)
   private String name;
 
+  // Bi-directional link to Enrollment
+  @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Enrollment> enrollments = new ArrayList<>();
+
   // default constructor required by JPA
   public Student() {
   }
@@ -29,6 +43,54 @@ public class Student {
     this.name = name;
   }
 
+  public Long getId() {
+    return id;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public List<Enrollment> getEnrollments() {
+    return enrollments;
+  }
+
+  public void setEnrollments(List<Enrollment> enrollments) {
+    this.enrollments = enrollments;
+  }  
+
+  // Optional: convenience method to sync both sides of relationship
+  public void addEnrollment(Enrollment enrollment) {
+    enrollments.add(enrollment);
+    enrollment.setStudent(this);
+  }
+
+  public void removeEnrollment(Enrollment enrollment) {
+    enrollments.remove(enrollment);
+    enrollment.setStudent(null);
+  }
+}
+
   // NOTE -> Cumming back to da gettas and settas since: 
     // I can't link Student - Enrollment - Course until other entities exist
     // Bi-Direction mapping(ex @OneToMany) requires refers other entities
@@ -38,12 +100,4 @@ public class Student {
       // Save a Student and Enrollment	Does the join table persist both foreign keys?
       // Fetch Course and get List<Enrollment>	Are bi-directional mappings set up right?
       // Delete a Course	Do enrollments delete with it if ON DELETE CASCADE?
-        
-}
 
-
-
-// poop bro
-// override stuff???
-// look at Trae chat
-//chatgpt name - mainchat4slopsite
