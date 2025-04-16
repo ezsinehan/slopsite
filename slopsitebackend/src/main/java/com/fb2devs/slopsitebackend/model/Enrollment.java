@@ -20,7 +20,7 @@ public class Enrollment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "student_id", nullable = false)
@@ -38,7 +38,7 @@ public class Enrollment {
     this.course = course;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 

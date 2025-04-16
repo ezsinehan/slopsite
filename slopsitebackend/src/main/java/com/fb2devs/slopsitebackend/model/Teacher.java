@@ -18,7 +18,7 @@ public class Teacher {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   @Column(nullable = false, unique = true)
   private String username;
@@ -42,7 +42,7 @@ public class Teacher {
     this.name = name;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
