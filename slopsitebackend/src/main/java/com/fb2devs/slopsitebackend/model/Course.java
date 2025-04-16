@@ -20,7 +20,7 @@ import java.util.List;
 public class Course {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private int id;
 
   @Column(nullable = false)
   private String name;
@@ -51,7 +51,7 @@ public class Course {
     this.teacher = teacher;
   }
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
@@ -112,5 +112,13 @@ public class Course {
   public void removeEnrollment(Enrollment enrollment) {
     enrollments.remove(enrollment);
     enrollment.setCourse(null);
+  }
+
+  public void printCourse() {
+    System.out.println("course name:" + this.name);
+    System.out.println("course time:" + this.time);
+    System.out.println("course total capacity:" + this.totalCapacity);
+    System.out.println("course current capacity:" + this.currentCapacity);
+    System.out.println("course teacher:" + this.teacher.getName());
   }
 }

@@ -18,7 +18,7 @@ public class Teacher {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private int id;
 
   @Column(nullable = false, unique = true)
   private String username;
@@ -42,7 +42,7 @@ public class Teacher {
     this.name = name;
   }
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
@@ -87,5 +87,11 @@ public class Teacher {
   public void removeCourse(Course course) {
     courses.remove(course);
     course.setTeacher(null);
+  }
+
+  public void printCourses() {
+    for (Course course : this.courses) {
+      course.printCourse();
+    }
   }
 }

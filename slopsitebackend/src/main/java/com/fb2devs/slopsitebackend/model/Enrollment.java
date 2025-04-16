@@ -20,7 +20,7 @@ public class Enrollment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private int id;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "student_id", nullable = false)
@@ -38,7 +38,7 @@ public class Enrollment {
     this.course = course;
   }
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
@@ -56,5 +56,11 @@ public class Enrollment {
 
   public void setCourse(Course course) {
     this.course = course;
+  }
+
+  public void printEnrollment() {
+    System.out.println("enrollment id:" + this.id);
+    System.out.println("enrollment student:" +this.student.getName());
+    System.out.println("enrollment course:" +this.course.getName());
   }
 }
