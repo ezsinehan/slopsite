@@ -59,6 +59,7 @@ public class TeacherController {
         }
     }
 
+    //seperation of concerns
     @GetMapping("/{teacherId}/courses-with-grades")
     public ResponseEntity<List<TeacherCoursesResponse>> getCoursesWithGrades(@PathVariable Integer teacherId) {
         try {

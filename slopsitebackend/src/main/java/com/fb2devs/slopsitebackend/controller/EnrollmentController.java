@@ -1,5 +1,6 @@
 package com.fb2devs.slopsitebackend.controller;
 
+import com.fb2devs.slopsitebackend.dto.EnrollmentInfo;
 import com.fb2devs.slopsitebackend.model.Course;
 import com.fb2devs.slopsitebackend.model.Enrollment;
 import com.fb2devs.slopsitebackend.model.Student;
@@ -31,6 +32,7 @@ public class EnrollmentController {
         this.courseService = courseService;
     }
 
+    //to do make sure adding enrollments works for students
     @PostMapping
     public ResponseEntity<Enrollment> createEnrollment(@RequestBody Enrollment enrollment) {
         return ResponseEntity.ok(enrollmentService.saveEnrollment(enrollment));
@@ -57,14 +59,25 @@ public class EnrollmentController {
     }
 
     @GetMapping("/by-course/{courseId}")
-    public ResponseEntity<List<Enrollment>> getEnrollmentsByCourse(@PathVariable Integer courseId) {
-        try {
-            Course course = courseService.getCourseById(courseId);
-            return ResponseEntity.ok(enrollmentService.getEnrollmentsByCourse(course));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+public ResponseEntity<List<EnrollmentInfo>> getEnrollmentsByCourse(@PathVariable Integer courseId) {
+    try {
+        Course course = courseService.getCourseById(courseId);
+        List<Enrollment> enrollments = enrollmentService.getEnrollmentsByCourse(course);
+
+        List<EnrollmentInfo> result = enrollments.stream()
+            .map(e -> new EnrollmentInfo(
+                e.getStudent().getId().longValue(),
+                e.getStudent().getName(),
+                e.getGrade()
+            ))
+            .toList();
+
+        return ResponseEntity.ok(result);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.notFound().build();
     }
+}
+
 
     @GetMapping("/courses-by-student/{studentId}")
     public ResponseEntity<List<Course>> getCoursesByStudent(@PathVariable Integer studentId) {
