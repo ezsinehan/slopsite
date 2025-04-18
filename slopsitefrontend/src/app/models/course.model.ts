@@ -19,6 +19,7 @@ export interface CourseStudentsData {
 export interface AdminCourse {
   id: number;
   name: string;
+  teacherName: string;
   time: string;
   currentCapacity: number;
   totalCapacity: number;

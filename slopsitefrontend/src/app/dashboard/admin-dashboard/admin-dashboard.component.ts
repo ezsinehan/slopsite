@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { DashboardService } from '../dashboard.service';
-import { User } from '../../models/user.model';
+import { User, Enrollment } from '../../models/user.model';
 import { Course, AdminCourse } from '../../models/course.model';
 
 @Component({
@@ -15,6 +15,7 @@ export class AdminDashboardComponent {
   allStudents: User[] = [];
   allTeachers: User[] = [];
   allCourses: AdminCourse[] = [];
+  enrollments: Enrollment[] = [];
 
   constructor(
     private authService: AuthService,
@@ -25,6 +26,7 @@ export class AdminDashboardComponent {
   ngOnInit(): void {
     this.loadAllUsers();
     this.loadAllCourses();
+    this.loadAllEnrollments();
   }
 
   loadAllUsers(): void {
@@ -57,6 +59,7 @@ export class AdminDashboardComponent {
           (c: Partial<AdminCourse>): AdminCourse => ({
             id: c.id ?? -1,
             name: c.name ?? 'namenotfound',
+            teacherName: c.teacherName ?? 'teachernamenotfound',
             time: c.time ?? 'timenotfound',
             currentCapacity: c.currentCapacity ?? -1,
             totalCapacity: c.totalCapacity ?? -1,
@@ -64,6 +67,18 @@ export class AdminDashboardComponent {
         );
       },
       error: (err) => console.error('Failed to load courses:', err),
+    });
+  }
+
+  loadAllEnrollments(): void {
+    this.dashboardService.getAllEnrollments().subscribe({
+      next: (data) => {
+        console.log('Enrollments:', data);
+        this.enrollments = data;
+      },
+      error: (err) => {
+        console.error('Failed to load enrollments:', err);
+      },
     });
   }
 
@@ -77,6 +92,20 @@ export class AdminDashboardComponent {
       },
       error: (err) => {
         console.error('Failed to create student:', err);
+      },
+    });
+  }
+
+  createTeacher(username: string, password: string, name: string): void {
+    const newTeacher = { username, password, name };
+
+    this.dashboardService.createTeacher(newTeacher).subscribe({
+      next: (createdTeacher) => {
+        console.log('Teacher created:', createdTeacher);
+        this.ngOnInit(); // refresh teacher list
+      },
+      error: (err) => {
+        console.error('Failed to create teacher:', err);
       },
     });
   }
@@ -108,6 +137,42 @@ export class AdminDashboardComponent {
       },
       error: (err) => {
         console.error('Failed to delete teacher:', err);
+      },
+    });
+  }
+
+  createCourse(
+    name: string,
+    time: string,
+    totalCapacity: number,
+    teacherId: number
+  ): void {
+    const newCourse = {
+      name,
+      time,
+      totalCapacity,
+      teacher: { id: teacherId },
+    };
+
+    this.dashboardService.createCourse(newCourse).subscribe({
+      next: (res) => {
+        console.log('Course created:', res);
+        this.ngOnInit(); // refresh course list
+      },
+      error: (err) => {
+        console.error('Failed to create course:', err);
+      },
+    });
+  }
+
+  deleteCourse(id: number): void {
+    this.dashboardService.deleteCourse(id).subscribe({
+      next: () => {
+        console.log('Deleted course with ID:', id);
+        this.ngOnInit(); // refresh course list
+      },
+      error: (err) => {
+        console.error('Failed to delete course:', err);
       },
     });
   }

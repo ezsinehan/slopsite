@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Course } from '../models/course.model';
-import { User } from '../models/user.model';
+import { User, Enrollment } from '../models/user.model';
 import { forkJoin, map } from 'rxjs';
 
 @Injectable({
@@ -25,6 +25,21 @@ export class DashboardService {
     return this.http.get<Course[]>('http://localhost:8080/admin/courses');
   }
 
+  createCourse(course: {
+    name: string;
+    time: string;
+    totalCapacity: number;
+    teacher: { id: number };
+  }): Observable<any> {
+    return this.http.post<any>('http://localhost:8080/admin/courses', course, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  deleteCourse(id: number): Observable<void> {
+    return this.http.delete<void>(`http://localhost:8080/admin/courses/${id}`);
+  }
+
   createStudent(student: {
     username: string;
     password: string;
@@ -41,6 +56,20 @@ export class DashboardService {
 
   deleteStudent(id: number) {
     return this.http.delete(`http://localhost:8080/admin/students/${id}`);
+  }
+
+  createTeacher(teacher: {
+    username: string;
+    password: string;
+    name: string;
+  }): Observable<User> {
+    return this.http.post<User>(
+      'http://localhost:8080/admin/teachers',
+      teacher,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 
   deleteTeacher(id: number) {
@@ -71,6 +100,12 @@ export class DashboardService {
   getAllCoursesStudent(studentId: number): Observable<Course[]> {
     return this.http.get<Course[]>(
       `${this.baseUrl}/courses/with-enrollment-status/${studentId}`
+    );
+  }
+
+  getAllEnrollments(): Observable<Enrollment[]> {
+    return this.http.get<Enrollment[]>(
+      'http://localhost:8080/admin/enrollments'
     );
   }
 

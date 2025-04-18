@@ -3,3 +3,8 @@ export interface User {
   name: string;
   role: string;
 }
+
+export interface Enrollment {
+  id: number;
+  grade: number;
+}
