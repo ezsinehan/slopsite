@@ -34,6 +34,17 @@ export class DashboardService {
     );
   }
 
+  updateGrade(enrollmentId: number, newGrade: number) {
+    return this.http.put(
+      `${this.baseUrl}/enrollments/${enrollmentId}/grade`,
+      {},
+      {
+        params: { grade: newGrade.toString() },
+        responseType: 'text' as const, // 👈 treat response as plain text
+      }
+    );
+  }
+
   enroll(studentId: number, courseId: number): Observable<any> {
     const payload = {
       student: { id: studentId },

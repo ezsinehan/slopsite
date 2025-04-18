@@ -14,9 +14,14 @@
 </ng-template>
 
 <ul *ngIf="StudentsData.length > 0; else noStudentData">
-  <li *ngFor="let CourseStudentsData of StudentsData">
-    <strong>{{ CourseStudentsData.studentName }}</strong> -
-    {{ CourseStudentsData.grade }}
+  <li *ngFor="let data of StudentsData">
+    <strong>{{ data.studentName }}</strong> -
+    <input
+      type="number"
+      [value]="data.grade"
+      #gradeInput
+      (keydown.enter)="updateGrade(data, gradeInput.value)"
+    />
   </li>
 </ul>
 

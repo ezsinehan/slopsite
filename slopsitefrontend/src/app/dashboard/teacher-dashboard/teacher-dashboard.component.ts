@@ -62,13 +62,36 @@ export class TeacherDashboardComponent {
             studentName: c.studentName ?? 'namenotfound',
             studentId: c.studentId ?? -1,
             grade: c.grade ?? -1,
-            enrollmentId: c.enrollmentId ?? -1,
+            enrollmentId: c.enrollmentId ?? null,
           })
         );
         console.log('student classes received in component:', courses);
       },
       error: (err) => {
         console.error('failed to fetch student courses:', err);
+      },
+    });
+  }
+
+  updateGrade(data: CourseStudentsData, newGradeValue: string): void {
+    const newGrade = Number(newGradeValue);
+
+    if (isNaN(newGrade)) {
+      console.error('Invalid grade input');
+      return;
+    }
+    if (!data.enrollmentId) {
+      console.error('no enrollment id: ', data);
+      return;
+    }
+
+    this.dashboardService.updateGrade(data.enrollmentId, newGrade).subscribe({
+      next: (res) => {
+        console.log('Grade updated:', res);
+        data.grade = newGrade;
+      },
+      error: (err) => {
+        console.error('Failed to update grade:', err);
       },
     });
   }
