@@ -1,11 +1,11 @@
 <nav>
-  <div>
+  <div class="nav-container">
     <span>Admin Dashboard</span>
     <button (click)="logout()">Logout</button>
   </div>
 </nav>
 
-<div>
+<div class="admin-container">
   <h2>Student Management</h2>
   <table>
     <thead>
@@ -19,31 +19,19 @@
       <tr *ngFor="let user of allStudents">
         <td>{{ user.name }}</td>
         <td>{{ user.id }}</td>
-        <!-- <td>
-          <select
-            #roleSelect
-            (change)="updateUserRole(user.id, roleSelect.value)"
-          >
-            <option value="STUDENT" selected>Student</option>
-            <option value="TEACHER">Teacher</option>
-            <option value="ADMIN">Admin</option>
-          </select>
-        </td> -->
         <td>
           <button (click)="deleteStudent(user.id)">Delete</button>
         </td>
       </tr>
     </tbody>
   </table>
+
   <h3>Create Student</h3>
   <input #usernameInput placeholder="Username" />
   <input #passwordInput placeholder="Password" type="password" />
   <input #nameInput placeholder="Full Name" />
   <button
-    (click)="
-      createStudent(usernameInput.value, passwordInput.value, nameInput.value)
-    "
-  >
+    (click)="createStudent(usernameInput.value, passwordInput.value, nameInput.value)">
     Create Student
   </button>
 
@@ -60,35 +48,19 @@
       <tr *ngFor="let user of allTeachers">
         <td>{{ user.name }}</td>
         <td>{{ user.id }}</td>
-        <!-- <td>
-          <select
-            #roleSelect
-            (change)="updateUserRole(user.id, roleSelect.value)"
-          >
-            <option value="STUDENT">Student</option>
-            <option value="TEACHER" selected>Teacher</option>
-            <option value="ADMIN">Admin</option>
-          </select>
-        </td> -->
         <td>
           <button (click)="deleteTeacher(user.id)">Delete</button>
         </td>
       </tr>
     </tbody>
   </table>
+
   <h3>Create Teacher</h3>
   <input #teacherUsername placeholder="Username" />
   <input #teacherPassword placeholder="Password" type="password" />
   <input #teacherName placeholder="Full Name" />
   <button
-    (click)="
-      createTeacher(
-        teacherUsername.value,
-        teacherPassword.value,
-        teacherName.value
-      )
-    "
-  >
+    (click)="createTeacher(teacherUsername.value, teacherPassword.value, teacherName.value)">
     Create Teacher
   </button>
 
@@ -112,48 +84,19 @@
         <td>{{ course.currentCapacity }}</td>
         <td>{{ course.totalCapacity }}</td>
         <td>
-          <!-- <button>Edit</button> -->
           <button (click)="deleteCourse(course.id)">Delete</button>
         </td>
       </tr>
     </tbody>
   </table>
+
   <h3>Create Course</h3>
   <input #courseName placeholder="Course Name" />
   <input #courseTime placeholder="Course Time" />
   <input #courseCapacity type="number" placeholder="Total Capacity" />
   <input #teacherId type="number" placeholder="Teacher ID" />
-
   <button
-    (click)="
-      createCourse(
-        courseName.value,
-        courseTime.value,
-        courseCapacity.valueAsNumber,
-        teacherId.valueAsNumber
-      )
-    "
-  >
+    (click)="createCourse(courseName.value, courseTime.value, courseCapacity.valueAsNumber, teacherId.valueAsNumber)">
     Create Course
   </button>
-
-  <div>
-    <!-- <button>Add New Course</button> -->
-  </div>
 </div>
-
-<!-- <h3>All Enrollments</h3>
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Grade</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let enrollment of enrollments">
-      <td>{{ enrollment.id }}</td>
-      <td>{{ enrollment.grade }}</td>
-    </tr>
-  </tbody>
-</table> -->
