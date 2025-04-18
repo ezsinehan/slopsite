@@ -11,7 +11,7 @@ import { Course } from '../../models/course.model';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent {
+export class StudentDashboardComponent {
   currentStudent!: User;
 
   constructor(
