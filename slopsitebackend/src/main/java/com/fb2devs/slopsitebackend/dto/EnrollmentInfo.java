@@ -1,17 +1,23 @@
 package com.fb2devs.slopsitebackend.dto;
 
 public class EnrollmentInfo {
+    private Integer enrollmentId;
     private Long studentId;
     private String studentName;
     private Integer grade;
 
-    public EnrollmentInfo(Long studentId, String studentName, Integer grade) {
+    public EnrollmentInfo(Integer enrollmentId, Long studentId, String studentName, Integer grade) {
+        this.enrollmentId = enrollmentId;
         this.studentId = studentId;
         this.studentName = studentName;
         this.grade = grade;
     }
 
-    // Getters and setters
+    // Getters
+    public Integer getEnrollmentId() {
+        return enrollmentId;
+    }
+
     public Long getStudentId() {
         return studentId;
     }
@@ -22,6 +28,11 @@ public class EnrollmentInfo {
 
     public Integer getGrade() {
         return grade;
+    }
+
+    // Setters
+    public void setEnrollmentId(Integer enrollmentId) {
+        this.enrollmentId = enrollmentId;
     }
 
     public void setStudentId(Long studentId) {

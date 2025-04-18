@@ -94,23 +94,26 @@ public class EnrollmentController {
 
     // ✅ Get all enrollments in a course (student name + grade)
     @GetMapping("/by-course/{courseId}")
-    public ResponseEntity<List<EnrollmentInfo>> getEnrollmentsByCourse(@PathVariable Integer courseId) {
-        try {
-            Course course = courseService.getCourseById(courseId);
-            List<Enrollment> enrollments = enrollmentService.getEnrollmentsByCourse(course);
+public ResponseEntity<List<EnrollmentInfo>> getEnrollmentsByCourse(@PathVariable Integer courseId) {
+    try {
+        Course course = courseService.getCourseById(courseId);
+        List<Enrollment> enrollments = enrollmentService.getEnrollmentsByCourse(course);
 
-            List<EnrollmentInfo> result = enrollments.stream()
-                .map(e -> new EnrollmentInfo(
-                    e.getStudent().getId().longValue(),
-                    e.getStudent().getName(),
-                    e.getGrade()
-                )).toList();
+        List<EnrollmentInfo> result = enrollments.stream()
+            .map(e -> new EnrollmentInfo(
+                e.getId(),                              // enrollmentId
+                e.getStudent().getId().longValue(),     // studentId
+                e.getStudent().getName(),               // studentName
+                e.getGrade()                            // grade
+            ))
+            .toList();
 
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(result);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.notFound().build();
     }
+}
+
 
     // ✅ Get all students enrolled in a course
     @GetMapping("/students-by-course/{courseId}")
