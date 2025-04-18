@@ -1,8 +1,11 @@
 package com.fb2devs.slopsitebackend.controller;
 
+import com.fb2devs.slopsitebackend.dto.CourseWithEnrollmentInfo;
 import com.fb2devs.slopsitebackend.model.Course;
 import com.fb2devs.slopsitebackend.model.Teacher;
+import com.fb2devs.slopsitebackend.repository.EnrollmentRepository;
 import com.fb2devs.slopsitebackend.service.CourseService;
+// import com.fb2devs.slopsitebackend.service.EnrollmentService;
 import com.fb2devs.slopsitebackend.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +19,31 @@ public class CourseController {
 
     private final CourseService courseService;
     private final TeacherService teacherService;
+    private final EnrollmentRepository enrollmentRepo; // Add this line to the constructor
 
     @Autowired
-    public CourseController(CourseService courseService, TeacherService teacherService) {
+    public CourseController(CourseService courseService, TeacherService teacherService, EnrollmentRepository enrollmentRepo) {
         this.courseService = courseService;
         this.teacherService = teacherService;
+        this.enrollmentRepo = enrollmentRepo; // Initialize the enrollmentService
     }
 
     @GetMapping
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
-    }
+public ResponseEntity<List<CourseWithEnrollmentInfo>> getAllCourses() {
+    List<Course> courses = courseService.getAllCourses();
+
+    List<CourseWithEnrollmentInfo> result = courses.stream().map(course -> {
+        int enrollmentCount = enrollmentRepo.countByCourse(course);
+        return new CourseWithEnrollmentInfo(
+            course.getId(),
+            course.getName(),
+            course.getTotalCapacity(),
+            enrollmentCount
+        );
+    }).toList();
+
+    return ResponseEntity.ok(result);
+}
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Integer id) {
@@ -58,12 +75,25 @@ public class CourseController {
 
     // Get all courses by teacher ID
     @GetMapping("/by-teacher/{teacherId}")
-    public ResponseEntity<List<Course>> getCoursesByTeacher(@PathVariable Integer teacherId) {
-        try {
-            Teacher teacher = teacherService.getTeacherById(teacherId);
-            return ResponseEntity.ok(courseService.getCoursesByTeacher(teacher));
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            return ResponseEntity.notFound().build();
-        }
+public ResponseEntity<List<CourseWithEnrollmentInfo>> getCoursesByTeacher(@PathVariable Integer teacherId) {
+    try {
+        Teacher teacher = teacherService.getTeacherById(teacherId);
+        List<Course> courses = courseService.getCoursesByTeacher(teacher);
+
+        List<CourseWithEnrollmentInfo> result = courses.stream().map(course -> {
+            int enrollmentCount = enrollmentRepo.countByCourse(course);
+            return new CourseWithEnrollmentInfo(
+                course.getId(),
+                course.getName(),
+                course.getTotalCapacity(),
+                enrollmentCount
+            );
+        }).toList();
+
+        return ResponseEntity.ok(result);
+    } catch (IllegalArgumentException | IllegalStateException e) {
+        return ResponseEntity.notFound().build();
     }
+}
+
 }

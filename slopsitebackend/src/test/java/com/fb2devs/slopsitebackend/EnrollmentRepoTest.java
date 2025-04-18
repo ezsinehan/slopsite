@@ -48,13 +48,15 @@ public class EnrollmentRepoTest {
     studentRepo.save(s2);
     studentRepo.save(s3);
 
-    // 📘 Create courses
-    Course c1 = new Course("Math", "MWF 9AM", 30, t1);
-    Course c2 = new Course("History", "TTh 2PM", 25, t1);
-    Course c3 = new Course("Physics", "MWF 1PM", 40, t2);
+    // 📘 Create courses (with screenshot times)
+    Course c1 = new Course("Math", "TR 11:00–11:50 AM", 30, t1);
+    Course c2 = new Course("History", "MWF 2:00–2:50 PM", 25, t1);
+    Course c3 = new Course("Physics", "MWF 10:00–10:50 AM", 40, t2);
+    Course c4 = new Course("Chemistry", "TR 3:00–3:50 PM", 35, t2);
     courseRepo.save(c1);
     courseRepo.save(c2);
     courseRepo.save(c3);
+    courseRepo.save(c4);
 
     // 📝 Create enrollments with grades
     Enrollment e1 = new Enrollment(s1, c1); e1.setGrade(95);
@@ -62,19 +64,23 @@ public class EnrollmentRepoTest {
     Enrollment e3 = new Enrollment(s2, c1); e3.setGrade(90);
     Enrollment e4 = new Enrollment(s3, c3); e4.setGrade(82);
     Enrollment e5 = new Enrollment(s2, c3); e5.setGrade(75);
+    Enrollment e6 = new Enrollment(s3, c4); e6.setGrade(85);
+    Enrollment e7 = new Enrollment(s1, c4); e7.setGrade(92);
 
     enrollmentRepo.save(e1);
     enrollmentRepo.save(e2);
     enrollmentRepo.save(e3);
     enrollmentRepo.save(e4);
     enrollmentRepo.save(e5);
+    enrollmentRepo.save(e6);
+    enrollmentRepo.save(e7);
 
     // ✅ Verify: Find all courses by a student
     List<Course> coursesForS1 = enrollmentRepo.findCoursesByStudent(s1);
-    Assertions.assertThat(coursesForS1.size()).isEqualTo(2);
+    Assertions.assertThat(coursesForS1.size()).isEqualTo(3);
     System.out.println("Courses for " + s1.getName() + ":");
     for (Course c : coursesForS1) {
-      System.out.println("- " + c.getName());
+      System.out.println("- " + c.getName() + " (" + c.getTime() + ")");
     }
 
     // ✅ Verify: Find all students in a course
@@ -95,7 +101,7 @@ public class EnrollmentRepoTest {
 
     // ✅ Verify: Grades
     List<Enrollment> enrollments = enrollmentRepo.findAll();
-    Assertions.assertThat(enrollments.size()).isEqualTo(5);
+    Assertions.assertThat(enrollments.size()).isEqualTo(7);
     System.out.println("All enrollments with grades:");
     for (Enrollment e : enrollments) {
       System.out.println("- " + e.getStudent().getName() + " in " +
