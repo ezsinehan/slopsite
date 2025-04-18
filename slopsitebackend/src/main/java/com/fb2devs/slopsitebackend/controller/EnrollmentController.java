@@ -35,9 +35,24 @@ public class EnrollmentController {
 
     // ✅ Create an enrollment
     @PostMapping
-    public ResponseEntity<Enrollment> createEnrollment(@RequestBody Enrollment enrollment) {
-        return ResponseEntity.ok(enrollmentService.saveEnrollment(enrollment));
+    public ResponseEntity<?> createEnrollment(@RequestBody Enrollment enrollment) {
+        try {
+            Course course = courseService.getCourseById(enrollment.getCourse().getId());
+            int currentEnrollment = enrollmentService.getEnrollmentsByCourse(course).size();
+
+            if (currentEnrollment >= course.getTotalCapacity()) {
+                return ResponseEntity
+                    .badRequest()
+                    .body("Enrollment failed: course is already full.");
+            }
+
+            return ResponseEntity.ok(enrollmentService.saveEnrollment(enrollment));
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid course or student.");
+        }
     }
+
 
     // ✅ Delete an enrollment by ID
     @DeleteMapping("/{id}")
