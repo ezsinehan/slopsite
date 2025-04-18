@@ -2,8 +2,10 @@ package com.fb2devs.slopsitebackend.controller;
 
 import com.fb2devs.slopsitebackend.dto.LoginRequest;
 import com.fb2devs.slopsitebackend.dto.LoginResponse;
+import com.fb2devs.slopsitebackend.model.Admin;
 import com.fb2devs.slopsitebackend.model.Student;
 import com.fb2devs.slopsitebackend.model.Teacher;
+import com.fb2devs.slopsitebackend.repository.AdminRepository;
 import com.fb2devs.slopsitebackend.repository.StudentRepository;
 import com.fb2devs.slopsitebackend.repository.TeacherRepository;
 
@@ -18,6 +20,9 @@ import java.util.Optional;
 public class LoginController {
 
     @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
@@ -25,6 +30,15 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        // Try to authenticate as Admin
+        Optional<Admin> adminOpt = adminRepository.findByUsernameAndPassword(
+                request.getUsername(), request.getPassword());
+
+        if (adminOpt.isPresent()) {
+            Admin admin = adminOpt.get();
+            return ResponseEntity.ok(new LoginResponse("admin", admin.getId().longValue(), admin.getName()));
+        }
+
         // Try to authenticate as Student
         Optional<Student> studentOpt = studentRepository.findByUsernameAndPassword(
                 request.getUsername(), request.getPassword());
@@ -43,7 +57,7 @@ public class LoginController {
             return ResponseEntity.ok(new LoginResponse("teacher", teacher.getId().longValue(), teacher.getName()));
         }
 
-        // Neither matched
+        // None matched
         return ResponseEntity.status(401).body("Invalid username or password");
     }
 }
