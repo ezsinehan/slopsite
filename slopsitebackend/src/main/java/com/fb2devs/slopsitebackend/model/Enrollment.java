@@ -27,12 +27,13 @@ public class Enrollment {
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "student_id", nullable = false)
-  @JsonBackReference
+  @JsonBackReference("student-enrollments")
   private Student student;
+  
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_id", nullable = false)
-  @JsonBackReference
+  @JsonBackReference("course-enrollments")
   private Course course;
 
   public Enrollment() {

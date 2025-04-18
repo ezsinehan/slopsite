@@ -58,5 +58,10 @@ public class EnrollmentService {
         }
         enrollmentRepo.deleteById(id);
     }
+
+    public List<Enrollment> getAllEnrollments() {
+        return enrollmentRepo.findAll();
+    }
+
 }
 

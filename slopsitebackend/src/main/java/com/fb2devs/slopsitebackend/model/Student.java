@@ -38,7 +38,7 @@ public class Student {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    @JsonManagedReference
+    @JsonManagedReference("student-enrollments")
     private List<Enrollment> enrollments = new ArrayList<>();
 
     // default constructor required by JPA
@@ -105,12 +105,3 @@ public class Student {
         enrollment.setStudent(null);
     }
 }
-// NOTE -> Cumming back to da gettas and settas since:
-// I can't link Student - Enrollment - Course until other entities exist
-// Bi-Direction mapping(ex @OneToMany) requires refers other entities
-// Risk circular imports or bad design if you guess to early
-// Test persistance across multiple entities -> examples ->
-// Save a Course with a Teacher	Is teacher_id handled correctly?
-// Save a Student and Enrollment	Does the join table persist both foreign keys?
-// Fetch Course and get List<Enrollment>	Are bi-directional mappings set up right?
-// Delete a Course	Do enrollments delete with it if ON DELETE CASCADE?
