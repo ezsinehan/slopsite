@@ -38,7 +38,13 @@ public class AdminController {
     @DeleteMapping("/students/{id}")
     public void deleteStudent(@PathVariable Integer id) {
         studentService.deleteStudent(id);
+
     }
+    @PutMapping("/students/{id}")
+    public Student updateStudent(@PathVariable Integer id, @RequestBody Student updatedStudent) {
+        return studentService.updateStudent(id, updatedStudent);
+    }
+
 
     // ===== TEACHERS =====
     @GetMapping("/teachers")
@@ -54,7 +60,14 @@ public class AdminController {
     @DeleteMapping("/teachers/{id}")
     public void deleteTeacher(@PathVariable Integer id) {
         teacherService.deleteTeacher(id);
+    
     }
+    @PutMapping("/teachers/{id}")
+public Teacher updateTeacher(@PathVariable Integer id, @RequestBody Teacher updatedTeacher) {
+    Teacher existing = teacherService.getTeacherById(id);
+    existing.setName(updatedTeacher.getName());
+    return teacherService.saveTeacher(existing);
+}
 
     // ===== COURSES =====
     @GetMapping("/courses")
@@ -102,5 +115,13 @@ public Course updateCourse(@PathVariable Integer id, @RequestBody Course updated
     @DeleteMapping("/enrollments/{id}")
     public void deleteEnrollment(@PathVariable Integer id) {
         enrollmentService.deleteEnrollment(id);
+
     }
+
+    @PutMapping("/enrollments/{id}/grade")
+    public Enrollment updateEnrollmentGrade(@PathVariable Integer id, @RequestParam int grade) {
+    Enrollment enrollment = enrollmentService.getEnrollmentById(id);
+    enrollment.setGrade(grade);
+    return enrollmentService.saveEnrollment(enrollment);
+}
 }

@@ -77,4 +77,21 @@ public List<StudentDTO> getAllStudentDtos() {
         }
         studentRepo.deleteById(id);
     }
+
+    public Student updateStudent(Integer id, Student updatedData) {
+        Student existing = getStudentById(id); // Already refreshes enrollments
+    
+        if (updatedData.getName() != null) {
+            existing.setName(updatedData.getName());
+        }
+        if (updatedData.getUsername() != null) {
+            existing.setUsername(updatedData.getUsername());
+        }
+        if (updatedData.getPassword() != null) {
+            existing.setPassword(updatedData.getPassword());
+        }
+    
+        return studentRepo.save(existing);
+    }
+    
 }
