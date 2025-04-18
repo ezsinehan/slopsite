@@ -138,4 +138,10 @@ public ResponseEntity<?> updateGrade(
     }
 }
 
+@GetMapping("/all")
+public List<Enrollment> getAllEnrollments() {
+    return enrollmentService.getAllEnrollments();
+}
+
+
 }

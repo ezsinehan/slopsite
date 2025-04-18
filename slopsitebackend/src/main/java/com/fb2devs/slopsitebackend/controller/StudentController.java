@@ -1,5 +1,6 @@
 package com.fb2devs.slopsitebackend.controller;
 
+import com.fb2devs.slopsitebackend.dto.StudentDTO;
 import com.fb2devs.slopsitebackend.model.Student;
 import com.fb2devs.slopsitebackend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,10 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
-    }
+public List<StudentDTO> getAllStudents() {
+    return studentService.getAllStudentDtos();
+}
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Integer id) {

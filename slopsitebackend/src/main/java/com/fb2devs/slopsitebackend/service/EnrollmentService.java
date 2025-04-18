@@ -10,6 +10,8 @@ import com.fb2devs.slopsitebackend.model.Enrollment;
 import com.fb2devs.slopsitebackend.model.Student;
 import com.fb2devs.slopsitebackend.repository.EnrollmentRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class EnrollmentService {
 
@@ -58,9 +60,14 @@ public class EnrollmentService {
     }
 
     public void deleteEnrollment(Integer id) {
-        if (!enrollmentRepo.existsById(id)) {
-            throw new IllegalStateException("Enrollment with ID " + id + " does not exist");
+        Enrollment enrollment = enrollmentRepo.findById(id)
+            .orElseThrow(() -> new IllegalStateException("Enrollment with ID " + id + " does not exist"));
+    
+        Student student = enrollment.getStudent();
+        if (student != null) {
+            student.getEnrollments().remove(enrollment); // Important: remove from both sides
         }
+    
         enrollmentRepo.deleteById(id);
     }
 
