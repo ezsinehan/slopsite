@@ -49,15 +49,31 @@ public class EnrollmentController {
         }
     }
 
-    @GetMapping("/by-student/{studentId}")
-    public ResponseEntity<List<Enrollment>> getEnrollmentsByStudent(@PathVariable Integer studentId) {
-        try {
-            Student student = studentService.getStudentById(studentId);
-            return ResponseEntity.ok(enrollmentService.getEnrollmentsByStudent(student));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+    @GetMapping("/courses-by-student/{studentId}")
+    public ResponseEntity<List<CourseWithEnrollmentInfo>> getCoursesByStudent(@PathVariable Integer studentId) {
+    try {
+        Student student = studentService.getStudentById(studentId);
+        List<Course> courses = enrollmentService.getCoursesByStudent(student);
+
+        List<CourseWithEnrollmentInfo> result = courses.stream().map(course -> {
+            int currentEnrollment = enrollmentService.getEnrollmentsByCourse(course).size();
+            String teacherName = (course.getTeacher() != null) ? course.getTeacher().getName() : "TBD";
+
+            return new CourseWithEnrollmentInfo(
+                course.getId(),
+                course.getName(),
+                teacherName,
+                course.getTotalCapacity(),
+                currentEnrollment
+            );
+        }).toList();
+
+        return ResponseEntity.ok(result);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.notFound().build();
         }
     }
+
 
     @GetMapping("/by-course/{courseId}")
 public ResponseEntity<List<EnrollmentInfo>> getEnrollmentsByCourse(@PathVariable Integer courseId) {
@@ -72,31 +88,6 @@ public ResponseEntity<List<EnrollmentInfo>> getEnrollmentsByCourse(@PathVariable
                 e.getGrade()
             ))
             .toList();
-
-        return ResponseEntity.ok(result);
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.notFound().build();
-    }
-}
-
-
-    //asdfljka
-    @GetMapping("/courses-by-student/{studentId}")
-public ResponseEntity<List<CourseWithEnrollmentInfo>> getCoursesByStudent(@PathVariable Integer studentId) {
-    try {
-        Student student = studentService.getStudentById(studentId);
-        List<Course> courses = enrollmentService.getCoursesByStudent(student);
-
-        List<CourseWithEnrollmentInfo> result = courses.stream().map(course -> {
-            int currentEnrollment = enrollmentService.getEnrollmentsByCourse(course).size();
-            return new CourseWithEnrollmentInfo(
-                course.getId(),
-                course.getName(),
-                course.getTotalCapacity(),    // ✅ correct method
-                currentEnrollment
-            );
-
-        }).toList();
 
         return ResponseEntity.ok(result);
     } catch (IllegalArgumentException e) {

@@ -29,21 +29,25 @@ public class CourseController {
     }
 
     @GetMapping
-public ResponseEntity<List<CourseWithEnrollmentInfo>> getAllCourses() {
-    List<Course> courses = courseService.getAllCourses();
-
-    List<CourseWithEnrollmentInfo> result = courses.stream().map(course -> {
-        int enrollmentCount = enrollmentRepo.countByCourse(course);
-        return new CourseWithEnrollmentInfo(
-            course.getId(),
-            course.getName(),
-            course.getTotalCapacity(),
-            enrollmentCount
-        );
-    }).toList();
-
-    return ResponseEntity.ok(result);
-}
+    public ResponseEntity<List<CourseWithEnrollmentInfo>> getAllCourses() {
+        List<Course> courses = courseService.getAllCourses();
+    
+        List<CourseWithEnrollmentInfo> result = courses.stream().map(course -> {
+            int enrollmentCount = enrollmentRepo.countByCourse(course);
+            String teacherName = (course.getTeacher() != null) ? course.getTeacher().getName() : "TBD";
+    
+            return new CourseWithEnrollmentInfo(
+                course.getId(),
+                course.getName(),
+                teacherName,
+                course.getTotalCapacity(),
+                enrollmentCount
+            );
+        }).toList();
+    
+        return ResponseEntity.ok(result);
+    }
+    
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Integer id) {
@@ -82,13 +86,17 @@ public ResponseEntity<List<CourseWithEnrollmentInfo>> getCoursesByTeacher(@PathV
 
         List<CourseWithEnrollmentInfo> result = courses.stream().map(course -> {
             int enrollmentCount = enrollmentRepo.countByCourse(course);
+            String teacherName = (course.getTeacher() != null) ? course.getTeacher().getName() : "TBD";
+        
             return new CourseWithEnrollmentInfo(
                 course.getId(),
                 course.getName(),
+                teacherName,
                 course.getTotalCapacity(),
                 enrollmentCount
             );
         }).toList();
+        
 
         return ResponseEntity.ok(result);
     } catch (IllegalArgumentException | IllegalStateException e) {
