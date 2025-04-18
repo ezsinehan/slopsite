@@ -8,6 +8,7 @@ public class CourseWithStudentStatus {
     private int capacity;
     private int currentEnrollment;
     private boolean isEnrolled;
+    private Integer enrollmentId;
 
     public CourseWithStudentStatus(
         Integer courseId,
@@ -16,7 +17,8 @@ public class CourseWithStudentStatus {
         String time,
         int capacity,
         int currentEnrollment,
-        boolean isEnrolled
+        boolean isEnrolled,
+        Integer enrollmentId
     ) {
         this.courseId = courseId;
         this.courseName = courseName;
@@ -25,8 +27,10 @@ public class CourseWithStudentStatus {
         this.capacity = capacity;
         this.currentEnrollment = currentEnrollment;
         this.isEnrolled = isEnrolled;
+        this.enrollmentId = enrollmentId;
     }
 
+    // Getters and setters
     public Integer getCourseId() {
         return courseId;
     }
@@ -79,7 +83,15 @@ public class CourseWithStudentStatus {
         return isEnrolled;
     }
 
-    public void setEnrolled(boolean enrolled) {
-        isEnrolled = enrolled;
+    public void setEnrolled(boolean isEnrolled) {
+        this.isEnrolled = isEnrolled;
+    }
+
+    public Integer getEnrollmentId() {
+        return enrollmentId;
+    }
+
+    public void setEnrollmentId(Integer enrollmentId) {
+        this.enrollmentId = enrollmentId;
     }
 }

@@ -3,6 +3,7 @@ package com.fb2devs.slopsitebackend.controller;
 import com.fb2devs.slopsitebackend.dto.CourseWithEnrollmentInfo;
 import com.fb2devs.slopsitebackend.dto.CourseWithStudentStatus;
 import com.fb2devs.slopsitebackend.model.Course;
+import com.fb2devs.slopsitebackend.model.Enrollment;
 import com.fb2devs.slopsitebackend.model.Student;
 import com.fb2devs.slopsitebackend.model.Teacher;
 import com.fb2devs.slopsitebackend.repository.EnrollmentRepository;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -129,17 +131,23 @@ public class CourseController {
         try {
             Student student = studentService.getStudentById(studentId);
             List<Course> allCourses = courseService.getAllCourses();
-            List<Course> enrolledCourses = enrollmentService.getCoursesByStudent(student);
-
-            Set<Integer> enrolledIds = enrolledCourses.stream()
-                .map(Course::getId)
-                .collect(Collectors.toSet());
-
+    
+            // Get all enrollments for this student
+            List<Enrollment> studentEnrollments = enrollmentService.getEnrollmentsByStudent(student);
+    
+            // Build a map from courseId → enrollmentId
+            Map<Integer, Integer> enrolledCourseToEnrollmentId = studentEnrollments.stream()
+                .collect(Collectors.toMap(
+                    e -> e.getCourse().getId(),
+                    Enrollment::getId
+                ));
+    
             List<CourseWithStudentStatus> result = allCourses.stream().map(course -> {
                 int enrollmentCount = enrollmentRepo.countByCourse(course);
-                boolean isEnrolled = enrolledIds.contains(course.getId());
+                boolean isEnrolled = enrolledCourseToEnrollmentId.containsKey(course.getId());
+                Integer enrollmentId = enrolledCourseToEnrollmentId.get(course.getId());
                 String teacherName = (course.getTeacher() != null) ? course.getTeacher().getName() : "TBD";
-
+    
                 return new CourseWithStudentStatus(
                     course.getId(),
                     course.getName(),
@@ -147,13 +155,15 @@ public class CourseController {
                     course.getTime(),
                     course.getTotalCapacity(),
                     enrollmentCount,
-                    isEnrolled
+                    isEnrolled,
+                    enrollmentId
                 );
             }).toList();
-
+    
             return ResponseEntity.ok(result);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
     }
+    
 }
