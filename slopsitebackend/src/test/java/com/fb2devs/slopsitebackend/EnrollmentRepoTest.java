@@ -2,6 +2,7 @@ package com.fb2devs.slopsitebackend;
 
 import org.assertj.core.api.Assertions;
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,10 +15,6 @@ import com.fb2devs.slopsitebackend.repository.CourseRepository;
 import com.fb2devs.slopsitebackend.repository.EnrollmentRepository;
 import com.fb2devs.slopsitebackend.repository.StudentRepository;
 import com.fb2devs.slopsitebackend.repository.TeacherRepository;
-
-
-
-
 
 @SpringBootTest
 public class EnrollmentRepoTest {
@@ -35,65 +32,83 @@ public class EnrollmentRepoTest {
   private TeacherRepository teacherRepo;
 
   @Test
-  public void testFindCoursesByStudent() {
-    // Setup
-    Student student = new Student("testuser", "pass", "Test Student");
-    studentRepo.save(student);
+  public void testEnrollmentWithGrades() {
+    // Create teacher
+    Teacher t1 = new Teacher("teacher1", "pass", "Dr. A");
+    Teacher t2 = new Teacher("teacher2", "pass", "Dr. B");
+    teacherRepo.save(t1);
+    teacherRepo.save(t2);
 
-    Course course1 = new Course("Math 101", "MWF 10AM", 30, null);
-    Course course2 = new Course("CS 201", "TTh 1PM", 25, null);
-    courseRepo.save(course1);
-    courseRepo.save(course2);
-
-    Enrollment e1 = new Enrollment(student, course1);
-    Enrollment e2 = new Enrollment(student, course2);
-    enrollmentRepo.save(e1);
-    enrollmentRepo.save(e2);
-
-    // Test
-    List<Course> studentCourses = enrollmentRepo.findCoursesByStudent(student);
-    Assertions.assertThat(studentCourses.size()).isEqualTo(2);
-    for (Course c : studentCourses) {
-      System.out.println("Student is enrolled in: " + c.getName());
-    }
-  }
-
-  @Test
-  public void testFindStudentsByCourse() {
-    Student s1 = new Student("alpha", "123", "Alpha A");
-    Student s2 = new Student("beta", "123", "Beta B");
+    // Create students
+    Student s1 = new Student("s1", "123", "Alice");
+    Student s2 = new Student("s2", "123", "Bob");
+    Student s3 = new Student("s3", "123", "Charlie");
     studentRepo.save(s1);
     studentRepo.save(s2);
+    studentRepo.save(s3);
 
-    Course course = new Course("Physics 101", "MWF 2PM", 20, null);
-    courseRepo.save(course);
+    // Create courses
+    Course c1 = new Course("Math", "MWF 9AM", 30, t1);
+    Course c2 = new Course("History", "TTh 2PM", 25, t1);
+    Course c3 = new Course("Physics", "MWF 1PM", 40, t2);
+    courseRepo.save(c1);
+    courseRepo.save(c2);
+    courseRepo.save(c3);
 
-    enrollmentRepo.save(new Enrollment(s1, course));
-    enrollmentRepo.save(new Enrollment(s2, course));
+    // Create enrollments with grades
+    Enrollment e1 = new Enrollment(s1, c1);
+    e1.setGrade(95);
 
-    List<Student> students = enrollmentRepo.findStudentsByCourse(course);
-    Assertions.assertThat(students.size()).isEqualTo(2);
-    for (Student s : students) {
-      System.out.println("Enrolled student: " + s.getName());
+    Enrollment e2 = new Enrollment(s1, c2);
+    e2.setGrade(88);
+
+    Enrollment e3 = new Enrollment(s2, c1);
+    e3.setGrade(90);
+
+    Enrollment e4 = new Enrollment(s3, c3);
+    e4.setGrade(82);
+
+    Enrollment e5 = new Enrollment(s2, c3);
+    e5.setGrade(75);
+
+
+    enrollmentRepo.save(e1);
+    enrollmentRepo.save(e2);
+    enrollmentRepo.save(e3);
+    enrollmentRepo.save(e4);
+    enrollmentRepo.save(e5);
+
+    // Verify: Find all courses by a student
+    List<Course> coursesForS1 = enrollmentRepo.findCoursesByStudent(s1);
+    Assertions.assertThat(coursesForS1.size()).isEqualTo(2);
+    System.out.println("Courses for " + s1.getName() + ":");
+    for (Course c : coursesForS1) {
+      System.out.println("- " + c.getName());
+    }
+
+    // Verify: Find all students in a course
+    List<Student> studentsInMath = enrollmentRepo.findStudentsByCourse(c1);
+    Assertions.assertThat(studentsInMath.size()).isEqualTo(2);
+    System.out.println("Students in Math:");
+    for (Student s : studentsInMath) {
+      System.out.println("- " + s.getName());
+    }
+
+    // Verify: Find all courses by teacher
+    List<Course> coursesByT1 = courseRepo.findByTeacher(t1);
+    Assertions.assertThat(coursesByT1.size()).isEqualTo(2);
+    System.out.println("Courses taught by " + t1.getName() + ":");
+    for (Course c : coursesByT1) {
+      System.out.println("- " + c.getName());
+    }
+
+    // Verify: Grades
+    List<Enrollment> enrollments = enrollmentRepo.findAll();
+    Assertions.assertThat(enrollments.size()).isEqualTo(5);
+    System.out.println("All enrollments with grades:");
+    for (Enrollment e : enrollments) {
+      System.out.println("- " + e.getStudent().getName() + " in " +
+                         e.getCourse().getName() + ": " + e.getGrade());
     }
   }
-
-  @Test
-public void testFindCoursesByTeacher() {
-  Teacher teacher = new Teacher("prof123", "secret", "Dr. Smith");
-  teacherRepo.save(teacher);
-
-  Course c1 = new Course("Bio 101", "MWF 10AM", 40, teacher);
-  Course c2 = new Course("Chem 101", "TTh 2PM", 35, teacher);
-  courseRepo.save(c1);
-  courseRepo.save(c2);
-
-  List<Course> courses = courseRepo.findByTeacher(teacher);
-  Assertions.assertThat(courses.size()).isEqualTo(2);
-  for (Course c : courses) {
-    System.out.println("Taught by teacher: " + c.getName());
-  }
 }
-
-}
-

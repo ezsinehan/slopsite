@@ -1,22 +1,29 @@
 package com.fb2devs.slopsitebackend.controller;
 
+import com.fb2devs.slopsitebackend.dto.StudentGradeInfo;
+import com.fb2devs.slopsitebackend.dto.TeacherCoursesResponse;
+import com.fb2devs.slopsitebackend.model.Course;
 import com.fb2devs.slopsitebackend.model.Teacher;
+import com.fb2devs.slopsitebackend.service.CourseService;
 import com.fb2devs.slopsitebackend.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/teachers")
 public class TeacherController {
 
     private final TeacherService teacherService;
+    private final CourseService courseService;
 
     @Autowired
-    public TeacherController(TeacherService teacherService) {
+    public TeacherController(TeacherService teacherService, CourseService courseService) {
         this.teacherService = teacherService;
+        this.courseService = courseService;
     }
 
     @GetMapping
@@ -51,4 +58,30 @@ public class TeacherController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{teacherId}/courses-with-grades")
+    public ResponseEntity<List<TeacherCoursesResponse>> getCoursesWithGrades(@PathVariable Integer teacherId) {
+        try {
+            Teacher teacher = teacherService.getTeacherById(teacherId);
+            List<Course> courses = courseService.getCoursesByTeacher(teacher);
+
+            List<TeacherCoursesResponse> response = courses.stream().map(course -> {
+                List<StudentGradeInfo> studentGrades = course.getEnrollments().stream().map(enrollment ->
+                    new StudentGradeInfo(
+                        enrollment.getStudent().getId(),
+                        enrollment.getStudent().getName(),
+                        enrollment.getGrade()
+                    )
+                ).collect(Collectors.toList());
+
+                return new TeacherCoursesResponse(course.getId(), course.getName(), studentGrades);
+            }).collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
+
+

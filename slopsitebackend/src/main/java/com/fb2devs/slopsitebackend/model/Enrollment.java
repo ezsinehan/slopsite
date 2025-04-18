@@ -2,6 +2,7 @@ package com.fb2devs.slopsitebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -62,9 +63,22 @@ public class Enrollment {
     this.course = course;
   }
 
+@Column(name = "grade")
+private Integer grade;  // or Double if you're using numeric grades
+
+public Integer getGrade() {
+    return grade;
+}
+
+public void setGrade(Integer grade) {
+    this.grade = grade;
+}
+
+
   public void printEnrollment() {
     System.out.println("enrollment id:" + this.id);
     System.out.println("enrollment student:" +this.student.getName());
     System.out.println("enrollment course:" +this.course.getName());
+    System.out.println("enrollment grade:" +this.grade);
   }
 }
