@@ -9,6 +9,7 @@ import com.fb2devs.slopsitebackend.model.Course;
 import com.fb2devs.slopsitebackend.model.Enrollment;
 import com.fb2devs.slopsitebackend.model.Student;
 import com.fb2devs.slopsitebackend.repository.EnrollmentRepository;
+import com.fb2devs.slopsitebackend.repository.CourseRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -16,10 +17,12 @@ import jakarta.transaction.Transactional;
 public class EnrollmentService {
 
     private final EnrollmentRepository enrollmentRepo;
+    private final CourseRepository courseRepo;
 
     @Autowired
-    public EnrollmentService(EnrollmentRepository enrollmentRepo) {
+    public EnrollmentService(EnrollmentRepository enrollmentRepo, CourseRepository courseRepo) {
         this.enrollmentRepo = enrollmentRepo;
+        this.courseRepo = courseRepo;
     }
 
     public Enrollment getEnrollmentById(Integer id) {
@@ -73,5 +76,16 @@ public class EnrollmentService {
 
     public List<Enrollment> getAllEnrollments() {
         return enrollmentRepo.findAll();
+    }
+
+    public void deleteEnrollmentsByCourseId(Integer courseId) {
+        Course course = courseRepo.findById(courseId)
+            .orElseThrow(() -> new IllegalArgumentException("Course with ID " + courseId + " not found"));
+    
+        List<Enrollment> enrollments = getEnrollmentsByCourse(course);
+    
+        for (Enrollment enrollment : enrollments) {
+            deleteEnrollment(enrollment.getId());
+        }
     }
 }

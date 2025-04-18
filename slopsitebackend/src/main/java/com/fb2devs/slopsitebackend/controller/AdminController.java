@@ -100,6 +100,11 @@ public Course updateCourse(@PathVariable Integer id, @RequestBody Course updated
     return courseService.saveCourse(existing);
 }
 
+@DeleteMapping("/courses/{courseId}/enrollments")
+public void deleteEnrollmentsByCourse(@PathVariable Integer courseId) {
+    enrollmentService.deleteEnrollmentsByCourseId(courseId);
+}
+
 
     // ===== ENROLLMENTS =====
     @GetMapping("/enrollments")
@@ -123,5 +128,6 @@ public Course updateCourse(@PathVariable Integer id, @RequestBody Course updated
     Enrollment enrollment = enrollmentService.getEnrollmentById(id);
     enrollment.setGrade(grade);
     return enrollmentService.saveEnrollment(enrollment);
+
 }
 }

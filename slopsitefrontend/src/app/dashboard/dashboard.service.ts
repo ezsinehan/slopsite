@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { Course } from '../models/course.model';
 import { User, Enrollment } from '../models/user.model';
 import { forkJoin, map } from 'rxjs';
@@ -37,7 +37,14 @@ export class DashboardService {
   }
 
   deleteCourse(id: number): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8080/admin/courses/${id}`);
+    // First delete enrollments, then delete the course
+    return this.http
+      .delete<void>(`http://localhost:8080/admin/courses/${id}/enrollments`)
+      .pipe(
+        switchMap(() =>
+          this.http.delete<void>(`http://localhost:8080/admin/courses/${id}`)
+        )
+      );
   }
 
   createStudent(student: {
