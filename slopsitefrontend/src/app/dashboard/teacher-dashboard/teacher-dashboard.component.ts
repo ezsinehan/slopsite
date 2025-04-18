@@ -3,7 +3,7 @@ import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { DashboardService } from '../dashboard.service';
 import { User } from '../../models/user.model';
-import { Course } from '../../models/course.model';
+import { Course, CourseStudentsData } from '../../models/course.model';
 
 @Component({
   standalone: false,
@@ -14,6 +14,7 @@ import { Course } from '../../models/course.model';
 export class TeacherDashboardComponent {
   currentTeacher!: User;
   teacherCourses: Course[] = [];
+  StudentsData: CourseStudentsData[] = [];
 
   constructor(
     private authService: AuthService,
@@ -50,6 +51,26 @@ export class TeacherDashboardComponent {
           console.error('failed to fetch student courses:', err);
         },
       });
+  }
+
+  getStudentsForCourse(course: Course): void {
+    this.dashboardService.getStudentsForCourse(course.courseId).subscribe({
+      next: (courses) => {
+        console.log('course student data:', courses);
+        this.StudentsData = courses.map(
+          (c: Partial<CourseStudentsData>): CourseStudentsData => ({
+            studentName: c.studentName ?? 'namenotfound',
+            studentId: c.studentId ?? -1,
+            grade: c.grade ?? -1,
+            enrollmentId: c.enrollmentId ?? -1,
+          })
+        );
+        console.log('student classes received in component:', courses);
+      },
+      error: (err) => {
+        console.error('failed to fetch student courses:', err);
+      },
+    });
   }
 
   logout(): void {

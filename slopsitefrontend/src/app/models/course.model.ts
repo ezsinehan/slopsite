@@ -9,4 +9,9 @@ export interface Course {
   enrollmentId: number | null;
 }
 
-export interface TeacherCourse {}
+export interface CourseStudentsData {
+  studentId: number;
+  studentName: string;
+  grade: number;
+  enrollmentId: number | null;
+}

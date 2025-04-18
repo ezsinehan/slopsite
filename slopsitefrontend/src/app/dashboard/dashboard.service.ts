@@ -22,7 +22,11 @@ export class DashboardService {
     );
   }
 
-  // getStudentsForCourse();
+  getStudentsForCourse(courseId: number): Observable<any> {
+    return this.http.get<Course[]>(
+      `${this.baseUrl}/enrollments/by-course/${courseId}`
+    );
+  }
 
   getAllCoursesStudent(studentId: number): Observable<Course[]> {
     return this.http.get<Course[]>(

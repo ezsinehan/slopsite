@@ -11,4 +11,16 @@
   <p>classesnotfound</p>
 </ng-template>
 
+<ul *ngIf="StudentsData.length > 0; else noStudentData">
+  <li *ngFor="let CourseStudentsData of CourseStudentData">
+    <strong>{{ CourseStudentsData.studentName }}</strong> -
+    {{ CourseStudentsData.grade }}
+    }}
+  </li>
+</ul>
+
+<ng-template #noStudentData>
+  <p>select a course</p>
+</ng-template>
+
 <button (click)="logout()">Logout</button>
