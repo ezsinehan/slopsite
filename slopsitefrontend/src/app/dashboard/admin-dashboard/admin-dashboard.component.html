@@ -1,0 +1,108 @@
+<nav>
+  <div>
+    <span>Admin Dashboard</span>
+    <button (click)="logout()">Logout</button>
+  </div>
+</nav>
+
+<div>
+  <h2>Student Management</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <!-- <th>Role</th> -->
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of allStudents">
+        <td>{{ user.name }}</td>
+        <!-- <td>
+          <select
+            #roleSelect
+            (change)="updateUserRole(user.id, roleSelect.value)"
+          >
+            <option value="STUDENT" selected>Student</option>
+            <option value="TEACHER">Teacher</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </td> -->
+        <td>
+          <button (click)="deleteStudent(user.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <input #usernameInput placeholder="Username" />
+  <input #passwordInput placeholder="Password" type="password" />
+  <input #nameInput placeholder="Full Name" />
+  <button
+    (click)="
+      createStudent(usernameInput.value, passwordInput.value, nameInput.value)
+    "
+  >
+    Create Student
+  </button>
+
+  <h2>Teacher Management</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <!-- <th>Role</th> -->
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of allTeachers">
+        <td>{{ user.name }}</td>
+        <!-- <td>
+          <select
+            #roleSelect
+            (change)="updateUserRole(user.id, roleSelect.value)"
+          >
+            <option value="STUDENT">Student</option>
+            <option value="TEACHER" selected>Teacher</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </td> -->
+        <td>
+          <button (click)="deleteTeacher(user.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Course Management</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Course Name</th>
+        <th>Teacher</th>
+        <th>Time</th>
+        <th>Enrollment</th>
+        <th>Capacity</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let course of allCourses">
+        <td>{{ course.name }}</td>
+        <td>—</td>
+        <td>{{ course.time }}</td>
+        <td>{{ course.currentCapacity }}</td>
+        <td>{{ course.totalCapacity }}</td>
+        <td>
+          <button>Edit</button>
+          <button>Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div>
+    <button>Add New Course</button>
+  </div>
+</div>

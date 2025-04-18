@@ -15,3 +15,11 @@ export interface CourseStudentsData {
   grade: number;
   enrollmentId: number | null;
 }
+
+export interface AdminCourse {
+  id: number;
+  name: string;
+  time: string;
+  currentCapacity: number;
+  totalCapacity: number;
+}
