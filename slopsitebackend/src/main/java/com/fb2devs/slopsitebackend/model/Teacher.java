@@ -12,6 +12,8 @@ import jakarta.persistence.CascadeType;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "teachers")
 public class Teacher {
@@ -30,6 +32,7 @@ public class Teacher {
   private String name;
 
   @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Course> courses = new ArrayList<>();
   // required no-arg constructor
   public Teacher() {

@@ -15,6 +15,9 @@ import jakarta.persistence.CascadeType;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "courses")
 public class Course {
@@ -36,9 +39,11 @@ public class Course {
 
   @ManyToOne
   @JoinColumn(name = "teacher_id", nullable = true)
+  @JsonBackReference
   private Teacher teacher;
 
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Enrollment> enrollments = new ArrayList<>();
 
   public Course() {}

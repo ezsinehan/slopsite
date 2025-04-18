@@ -1,5 +1,7 @@
 package com.fb2devs.slopsitebackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -24,10 +26,12 @@ public class Enrollment {
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "student_id", nullable = false)
+  @JsonBackReference
   private Student student;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_id", nullable = false)
+  @JsonBackReference
   private Course course;
 
   public Enrollment() {
