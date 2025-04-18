@@ -122,4 +122,20 @@ public class EnrollmentController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/{enrollmentId}/grade")
+public ResponseEntity<?> updateGrade(
+        @PathVariable Integer enrollmentId,
+        @RequestParam int grade
+) {
+    try {
+        Enrollment enrollment = enrollmentService.getEnrollmentById(enrollmentId);
+        enrollment.setGrade(grade);
+        enrollmentService.saveEnrollment(enrollment);
+        return ResponseEntity.ok("Grade updated successfully.");
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body("Enrollment not found.");
+    }
+}
+
 }

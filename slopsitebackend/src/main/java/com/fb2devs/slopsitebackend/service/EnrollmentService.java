@@ -20,6 +20,11 @@ public class EnrollmentService {
         this.enrollmentRepo = enrollmentRepo;
     }
 
+    public Enrollment getEnrollmentById(Integer id) {
+        return enrollmentRepo.findById(id).orElseThrow(() ->
+            new IllegalArgumentException("Enrollment with ID " + id + " not found"));
+    }
+
     public List<Enrollment> getEnrollmentsByStudent(Student student) {
         if (student == null || student.getId() == null) {
             throw new IllegalArgumentException("Student or student ID must not be null");
@@ -62,6 +67,4 @@ public class EnrollmentService {
     public List<Enrollment> getAllEnrollments() {
         return enrollmentRepo.findAll();
     }
-
 }
-
