@@ -75,6 +75,19 @@ public class AdminController {
         courseService.deleteCourse(id);
     }
 
+    @PutMapping("/courses/{id}")
+public Course updateCourse(@PathVariable Integer id, @RequestBody Course updatedCourse) {
+    Course existing = courseService.getCourseById(id);
+
+    existing.setName(updatedCourse.getName());
+    existing.setTime(updatedCourse.getTime());
+    existing.setTotalCapacity(updatedCourse.getTotalCapacity());
+    existing.setTeacher(updatedCourse.getTeacher());
+
+    return courseService.saveCourse(existing);
+}
+
+
     // ===== ENROLLMENTS =====
     @GetMapping("/enrollments")
     public List<Enrollment> getAllEnrollments() {
