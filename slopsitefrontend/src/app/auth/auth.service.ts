@@ -42,6 +42,10 @@ export class AuthService {
     return this.currentUser !== null;
   }
 
+  isTeacher(): boolean {
+    return this.currentUser?.role === 'teacher';
+  }
+
   logout(): void {
     this.currentUser = null;
     localStorage.removeItem('user');

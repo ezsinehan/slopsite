@@ -16,6 +16,14 @@ export class DashboardService {
     );
   }
 
+  getMyCoursesTeacher(teacherId: number): Observable<Course[]> {
+    return this.http.get<Course[]>(
+      `${this.baseUrl}/courses/by-teacher/${teacherId}`
+    );
+  }
+
+  // getStudentsForCourse();
+
   getAllCoursesStudent(studentId: number): Observable<Course[]> {
     return this.http.get<Course[]>(
       `${this.baseUrl}/courses/with-enrollment-status/${studentId}`

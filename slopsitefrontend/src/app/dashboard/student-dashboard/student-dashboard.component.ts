@@ -86,6 +86,7 @@ export class StudentDashboardComponent {
         next: (res) => {
           console.log('enrolling in course:', course);
           console.log('da enrollment: ', res);
+          this.ngOnInit();
         },
         error: (err) => {
           console.error('failed to enroll:', err);
@@ -94,10 +95,16 @@ export class StudentDashboardComponent {
   }
 
   drop(course: Course): void {
-    this.dashboardService.drop(course.courseId).subscribe({
+    if (course.enrollmentId === null) {
+      console.error('Cannot drop: enrollmentId is null');
+      return;
+    }
+
+    this.dashboardService.drop(course.enrollmentId).subscribe({
       next: (res) => {
         console.log('dropping course:', course);
         console.log('da drop: ', res);
+        this.ngOnInit();
       },
       error: (err) => {
         console.error('failed to drop:', err);

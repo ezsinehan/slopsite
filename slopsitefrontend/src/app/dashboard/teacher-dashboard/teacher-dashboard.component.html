@@ -1,12 +1,14 @@
-<h3>manage courses</h3>
+<h3>your courses</h3>
 
-<ul *ngIf="allCourses.length > 0; else noAllCourses">
-  <li *ngFor="let course of allCourses">
-    <strong>{{ course.courseName }}</strong> - {{ course.teacherName }} -
-    {{ course.time }} - {{ course.currentEnrollment }}/{{ course.capacity }} -
-    {{ course.enrollmentId }} -
-
-    <button *ngIf="course.enrolled" (click)="drop(course)">Drop</button>
-    <button *ngIf="!course.enrolled" (click)="enroll(course)">Enroll</button>
+<ul *ngIf="teacherCourses.length > 0; else noAllCourses">
+  <li *ngFor="let course of teacherCourses">
+    <strong>{{ course.courseName }}</strong> - {{ course.time }} -
+    {{ course.currentEnrollment }}/{{ course.capacity }}
   </li>
 </ul>
+
+<ng-template #noAllCourses>
+  <p>classesnotfound</p>
+</ng-template>
+
+<button (click)="logout()">Logout</button>

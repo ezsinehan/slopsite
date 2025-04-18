@@ -8,6 +8,10 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (authService.isLoggedIn()) {
+    if (authService.getCurrentUser().role === 'teacher') {
+      router.navigate(['/teacher-dashboard']);
+      return false;
+    }
     return true;
   } else {
     router.navigate(['/login']);
