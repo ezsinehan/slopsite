@@ -13,6 +13,7 @@ import com.fb2devs.slopsitebackend.service.CourseService;
 import com.fb2devs.slopsitebackend.service.EnrollmentService;
 import com.fb2devs.slopsitebackend.service.StudentService;
 import com.fb2devs.slopsitebackend.service.TeacherService;
+import com.fb2devs.slopsitebackend.dto.AdminCourseDto;
 
 @RestController
 @RequestMapping("/admin")
@@ -57,9 +58,12 @@ public class AdminController {
 
     // ===== COURSES =====
     @GetMapping("/courses")
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
-    }
+    public List<AdminCourseDto> getAllCourses() {
+    return courseService.getAllCourses().stream()
+        .map(AdminCourseDto::new)
+        .toList();
+}
+
 
     @PostMapping("/courses")
     public Course createCourse(@RequestBody Course course) {
