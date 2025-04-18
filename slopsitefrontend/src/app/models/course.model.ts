@@ -1,6 +1,10 @@
 export interface Course {
-  name: string;
+  courseName: string;
+  courseId: number;
+  teacherName: string;
   time: string;
-  currentCapacity: string;
-  totalCapacity: string;
+  currentEnrollment: string;
+  capacity: string;
+  enrolled: boolean | null;
+  enrollmentId: number | null;
 }

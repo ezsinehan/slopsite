@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   username: string = '';

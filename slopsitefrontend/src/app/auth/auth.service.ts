@@ -10,7 +10,7 @@ import { User } from '../models/user.model';
 export class AuthService {
   private currentUser: User | null = null;
 
-  private baseUrl = 'http://localhost:8080/auth';
+  private baseUrl = 'http://localhost:8080';
   constructor(private http: HttpClient) {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
